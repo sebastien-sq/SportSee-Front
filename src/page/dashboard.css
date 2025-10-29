@@ -1,0 +1,362 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 68px 90px 86px 226px;
+  height: calc(100vh - 90px);
+}
+
+.dashboard__welcome {
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 77px;
+}
+
+.dashboard__title {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  font-size: 48px;
+  font-weight: 500;
+  margin-bottom: 41px;
+}
+
+.dashboard__title--highlight {
+  color: #e60000;
+}
+
+.dashboard__subtitle {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.dashboard__data {
+  display: flex;
+  width: 100%;
+  /* Hauteur fixe pour respecter les spécifications exactes */
+  height: clamp(450px, calc(59.9vh), 613px);
+}
+
+.dashboard__charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  width: 74.288%;
+  height: 100%; /* Prend toute la hauteur disponible de dashboard__data */
+  /* Gap exact selon les spécifications */
+  gap: clamp(16px, calc((100vw - 1024px) * 0.0336 + 16px), 30px);
+  /* Assure une répartition égale de l'espace */
+  justify-items: stretch;
+  align-items: stretch;
+}
+
+.dashboard__chart--main {
+  grid-column: 1 / 4;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Hauteur exacte : 320px en 1440x1024 */
+  height: clamp(200px, calc((100vh - 720px) * 0.395 + 200px), 320px);
+}
+
+.dashboard__chart--secondary {
+  /* Hauteur exacte : 263px en 1440x1024 */
+  height: clamp(160px, calc((100vh - 720px) * 0.339 + 160px), 263px);
+  /* Assure une largeur égale pour tous les graphiques secondaires */
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard__chart--secondary:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.dashboard__chart--secondary:nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.dashboard__chart--secondary:nth-child(4) {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.dashboard__stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 31px;
+  width: 22.953%;
+}
+
+.dashboard__stat {
+  height: 20.228%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-shadow: 0px 2px 4px 0px #00000005;
+  border-radius: 5px;
+  /* width: 258px; */
+  background-color: #fbfbfb;
+}
+
+.dashboard__stat-icon {
+  width: 60px;
+  height: 60px;
+  margin-left: 32px;
+}
+
+.dashboard__stat-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 24px;
+  font-family: "Roboto", sans-serif;
+  line-height: 24px;
+}
+
+.dashboard__stat-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.dashboard__stat-label {
+  margin-top: 2px;
+  font-size: 14px;
+  color: #74798c;
+  font-weight: 500;
+}
+
+/* Media queries pour la responsivité 1024x720 à 1440x1024px */
+/* Note: La responsivité des graphiques est maintenant gérée par clamp() */
+
+/* Pour écrans entre 1440px et 1201px */
+@media screen and (max-width: 1440px) and (min-width: 1201px) {
+  .dashboard {
+    padding: 60px 80px 80px 200px;
+  }
+
+  .dashboard__welcome {
+    margin-bottom: 65px;
+  }
+
+  .dashboard__title {
+    font-size: 44px;
+    margin-bottom: 35px;
+  }
+
+  .dashboard__subtitle {
+    font-size: 17px;
+  }
+
+  .dashboard__stats {
+    margin-left: 31px;
+  }
+}
+
+/* Pour écrans entre 1200px et 1025px */
+@media screen and (max-width: 1200px) and (min-width: 1025px) {
+  .dashboard {
+    padding: 50px 70px 70px 180px;
+  }
+
+  .dashboard__welcome {
+    margin-bottom: 55px;
+  }
+
+  .dashboard__title {
+    font-size: 40px;
+    margin-bottom: 30px;
+  }
+
+  .dashboard__subtitle {
+    font-size: 16px;
+  }
+
+  .dashboard__stats {
+    margin-left: 25px;
+  }
+
+  .dashboard__stat-icon {
+    width: 55px;
+    height: 55px;
+    margin-left: 28px;
+  }
+
+  .dashboard__stat-info {
+    margin-left: 20px;
+  }
+
+  .dashboard__stat-value {
+    font-size: 19px;
+  }
+
+  .dashboard__stat-label {
+    font-size: 13px;
+  }
+}
+
+/* Pour écrans de 1024px */
+@media screen and (max-width: 1024px) and (min-width: 1024px) {
+  .dashboard {
+    padding: 45px 60px 60px 160px;
+  }
+
+  .dashboard__welcome {
+    margin-bottom: 50px;
+  }
+
+  .dashboard__title {
+    font-size: 36px;
+    margin-bottom: 25px;
+  }
+
+  .dashboard__subtitle {
+    font-size: 15px;
+  }
+
+  .dashboard__stats {
+    margin-left: 22px;
+  }
+
+  .dashboard__stat-icon {
+    width: 50px;
+    height: 50px;
+    margin-left: 25px;
+  }
+
+  .dashboard__stat-info {
+    margin-left: 18px;
+  }
+
+  .dashboard__stat-value {
+    font-size: 17px;
+  }
+
+  .dashboard__stat-label {
+    font-size: 12px;
+  }
+}
+
+/* Media query spécifique pour 1024x720 (résolution minimale supportée) */
+@media screen and (width: 1024px) and (height: 720px) {
+  .dashboard {
+    padding: 35px 45px 45px 140px;
+  }
+
+  .dashboard__welcome {
+    margin-bottom: 35px;
+  }
+
+  .dashboard__title {
+    font-size: 30px;
+    margin-bottom: 18px;
+  }
+
+  .dashboard__subtitle {
+    font-size: 13px;
+  }
+
+  .dashboard__stats {
+    margin-left: 18px;
+  }
+
+  .dashboard__stat-icon {
+    width: 42px;
+    height: 42px;
+    margin-left: 20px;
+  }
+
+  .dashboard__stat-info {
+    margin-left: 14px;
+  }
+
+  .dashboard__stat-value {
+    font-size: 15px;
+  }
+
+  .dashboard__stat-label {
+    font-size: 10px;
+  }
+}
+
+/* Media queries additionnelles pour des ajustements fins */
+@media screen and (max-width: 1375px) {
+  .dashboard__stats {
+    margin-left: 27px;
+  }
+
+  .dashboard__stat-icon {
+    margin-left: 22px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .dashboard__stat-info {
+    margin-left: 20px;
+  }
+
+  .dashboard__stat-value {
+    font-size: 22px;
+  }
+
+  .dashboard__stat-label {
+    margin-top: 2px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .dashboard__stats {
+    margin-left: 25px;
+  }
+
+  .dashboard__stat-icon {
+    margin-left: 20px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .dashboard__stat-info {
+    margin-left: 17px;
+  }
+
+  .dashboard__stat-value {
+    font-size: 18px;
+  }
+
+  .dashboard__stat-label {
+    margin-top: 1px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .dashboard__stats {
+    margin-left: 20px;
+  }
+
+  .dashboard__stat-icon {
+    margin-left: 15px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .dashboard__stat-info {
+    margin-left: 10px;
+  }
+
+  .dashboard__stat-value {
+    font-size: 16px;
+  }
+
+  .dashboard__stat-label {
+    margin-top: 0px;
+    font-size: 12px;
+  }
+}

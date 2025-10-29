@@ -1,0 +1,743 @@
+.activity-tooltip-value {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 7px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: center;
+}
+/**
+ * Styles CSS pour les composants graphiques
+ * Styles de base, vous pourrez les personnaliser selon le Figma
+ */
+
+/* Styles communs pour tous les graphiques */
+.chart-loading,
+.chart-error,
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 14px;
+  color: #74798c;
+  font-family: "Roboto", sans-serif;
+}
+
+.chart-error {
+  color: #e60000;
+}
+
+/* Application de Roboto sur tous les éléments Recharts */
+.recharts-cartesian-axis-tick-value,
+.recharts-polar-angle-axis-tick-value,
+.recharts-legend-item-text,
+.recharts-tooltip-wrapper,
+.recharts-tooltip-item-value,
+.recharts-tooltip-item-name {
+  font-family: "Roboto", sans-serif !important;
+}
+
+/* Styles spécifiques pour ActivityChart */
+.activity-chart .recharts-cartesian-axis-tick-value {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  fill: #9b9eac;
+}
+
+/* Grille du graphique d'activité - Forcer l'affichage de toutes les lignes */
+.activity-chart .recharts-cartesian-grid-horizontal line {
+  stroke: #dedede !important;
+  stroke-width: 1 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* La ligne du bas (dernière) doit être pleine */
+.activity-chart .recharts-cartesian-grid-horizontal line:last-child {
+  stroke-dasharray: none !important;
+}
+
+/* Les autres lignes (y compris intermédiaire) en pointillés */
+.activity-chart .recharts-cartesian-grid-horizontal line:not(:last-child) {
+  stroke-dasharray: 2 2 !important;
+}
+
+.activity-chart .recharts-cartesian-grid-vertical line {
+  stroke: none;
+}
+
+.activity-chart .activity-bar-weight {
+  fill: #282d30;
+}
+
+.activity-chart .activity-bar-calories {
+  fill: #e60000;
+}
+
+/* Rectangle de survol pour le graphique d'activité */
+.activity-chart .recharts-tooltip-cursor {
+  fill: #c4c4c480 !important;
+  stroke: none !important;
+}
+
+.activity-chart .activity-tooltip-cursor {
+  fill: #c4c4c480 !important;
+  stroke: none !important;
+}
+
+.activity-chart .recharts-active-bar {
+  opacity: 1;
+}
+
+.activity-chart .recharts-tooltip-cursor.recharts-cartesian-grid {
+  fill: #c4c4c480 !important;
+}
+
+/* Styles spécifiques pour SessionsChart */
+.sessions-chart .recharts-cartesian-axis-tick-value {
+  fill: #ffffff;
+  opacity: 0.7;
+  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  transform: translateY(8px); /* Déplace les jours de la semaine plus bas */
+}
+
+.sessions-chart .recharts-tooltip-cursor {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 32;
+}
+
+.sessions-chart .recharts-line {
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke-width 0.2s ease;
+}
+
+.sessions-chart .recharts-line:hover {
+  stroke-width: 3;
+}
+
+.sessions-chart .recharts-dot {
+  fill: transparent;
+  stroke-width: 0;
+  r: 0;
+  opacity: 0;
+}
+
+.sessions-chart .recharts-active-dot {
+  r: 4;
+  fill: #ffffff;
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 8;
+  opacity: 1;
+  animation: sessionsDotPulse 0.3s ease-out;
+}
+
+/* Animation pour le point au survol */
+@keyframes sessionsDotPulse {
+  0% {
+    r: 0;
+    opacity: 0;
+  }
+  50% {
+    r: 6;
+    opacity: 0.8;
+  }
+  100% {
+    r: 4;
+    opacity: 1;
+  }
+}
+
+/* Style pour l'activeDot - Simple et propre */
+.sessions-chart .sessions-active-dot {
+  fill: #ffffff !important;
+  stroke: #ffffff33 !important;
+  stroke-width: 5px !important;
+  r: 8px !important;
+}
+
+/* Forcer l'affichage des activeDots */
+.sessions-chart .recharts-active-dot {
+  fill: #ffffff !important;
+  stroke: #ffffff33 !important;
+  stroke-width: 5px !important;
+  r: 8px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Cercles dans l'activeDot */
+.sessions-chart .recharts-active-dot circle {
+  fill: #ffffff !important;
+  stroke: #ffffff33 !important;
+  stroke-width: 5px !important;
+  r: 4px !important;
+}
+
+/* Tous les cercles de l'activeDot - Style uniforme */
+.sessions-chart .recharts-active-dot,
+.sessions-chart .recharts-dot[r="4"],
+.sessions-chart .recharts-dot[r="6"],
+.sessions-chart circle[r="4"],
+.sessions-chart circle[r="6"],
+.sessions-chart circle[class*="sessions-active-dot"] {
+  fill: #ffffff !important;
+  stroke: #ffffff33 !important;
+  stroke-width: 10px !important;
+  r: 4px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Alternative pour cibler directement les éléments SVG */
+.sessions-chart svg circle[r]:not([r="0"]) {
+  fill: #ffffff !important;
+  stroke: #ffffff33 !important;
+  stroke-width: 5px !important;
+  r: 8px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Force ultra-aggressive pour TOUS les cercles dans le SessionsChart */
+.sessions-chart svg circle {
+  fill: #ffffff !important;
+  stroke: #ffffff33 !important;
+  stroke-width: 5px !important;
+  r: 8px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Spécifiquement pour les activeDot */
+.sessions-chart svg circle[r="8"] {
+  fill: #ffffff !important;
+  stroke: #ffffff33 !important;
+  stroke-width: 5px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Overlay d'assombrissement pour les sessions */
+.sessions-chart {
+  position: relative;
+}
+
+.sessions-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  display: none;
+  z-index: 1;
+}
+
+/* S'assurer que le SVG des graphiques est au-dessus de l'overlay */
+.sessions-chart .recharts-wrapper {
+  position: relative;
+  z-index: 5;
+}
+
+.sessions-chart .recharts-wrapper svg {
+  position: relative;
+  z-index: 5;
+}
+
+/* Point personnalisé qui suit le curseur - Style simple */
+.custom-hover-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 5px solid #ffffff33;
+  display: none;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Styles spécifiques pour PerformanceChart */
+.performance-chart .recharts-polar-grid-concentric-polygon {
+  stroke: #ffffff;
+  stroke-opacity: 1;
+}
+
+.performance-chart .recharts-polar-angle-axis-tick-value {
+  fill: #ffffff;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+.performance-chart .recharts-radar {
+  stroke: transparent;
+  fill: #ff0101b2;
+  fill-opacity: 1;
+  stroke-width: 0;
+}
+
+/* Styles spécifiques pour ScoreChart */
+.score-chart .recharts-pie-sector {
+  outline: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Forcer les bords arrondis sur l'arc de score */
+.score-chart .recharts-pie-sector[fill="#FF0101"] {
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  rx: 10 !important;
+  ry: 10 !important;
+}
+
+/* Styles alternatifs pour les bords arrondis */
+.score-chart svg path[fill="#FF0101"] {
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+/* Cibler spécifiquement les paths du score */
+.score-chart .recharts-pie path {
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.score-chart .score-background-circle .recharts-pie-sector {
+  fill: transparent;
+  opacity: 0;
+}
+
+.score-chart .score-progress-arc {
+  fill: #ff0000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.score-chart .score-remaining-arc {
+  fill: transparent;
+}
+
+/* =============================================== */
+/* RESPONSIVE DESIGN - GRAPHIQUES SPORTSEE        */
+/* =============================================== */
+
+/* Hauteurs et tailles de base pour tous les graphiques */
+.activity-chart,
+.sessions-chart,
+.performance-chart,
+.score-chart {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: "Roboto", sans-serif;
+}
+
+.activity-chart {
+  background: #fbfbfb;
+  padding: clamp(16px, 2vw, 24px);
+}
+
+.sessions-chart {
+  background: #ff0000;
+  box-shadow: 0px 2px 4px 0px #00000005;
+  color: white;
+}
+
+.performance-chart {
+  background: #282d30;
+  padding: clamp(14px, 1.8vw, 24px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 2px 4px 0px #00000005;
+}
+
+.score-chart {
+  background: #fbfbfb;
+  padding: clamp(12px, 2vw, 24px);
+  position: relative;
+  box-shadow: 0px 2px 4px 0px #00000005;
+  min-height: clamp(180px, 25vh, 250px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* =============================================== */
+/* SYSTÈME RESPONSIVE FLUIDE OPTIMISÉ             */
+/* De 1024x780 à 1440x1024 avec 1024x1024 et 1440x780 */
+/* =============================================== */
+
+/* Les graphiques utilisent toujours 100% de l'espace de leur conteneur */
+.performance-chart .recharts-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Fix pour la div intermédiaire entre responsive-container et wrapper */
+.performance-chart .recharts-responsive-container > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Fix pour tous les éléments enfants dans le performance chart */
+.performance-chart .recharts-responsive-container,
+.performance-chart .recharts-responsive-container > *,
+.performance-chart .recharts-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Responsive Container optimisé pour PerformanceChart */
+.performance-chart .recharts-wrapper svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: min(100%, 100vh) !important;
+  max-height: min(100%, 100vw) !important;
+}
+
+/* Ajustements fluides pour toutes les résolutions ciblées */
+@media screen and (min-width: 1024px) and (max-width: 1440px) {
+  .activity-chart,
+  .performance-chart,
+  .score-chart {
+    padding: clamp(16px, calc(1rem + 0.5vw), 24px);
+  }
+}
+
+/* Responsive spécifique pour ScoreChart */
+@media screen and (max-width: 1440px) {
+  .score-container {
+    max-width: clamp(140px, 15vw, 200px);
+    max-height: clamp(140px, 15vw, 200px);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .score-container {
+    max-width: clamp(120px, 18vw, 160px);
+    max-height: clamp(120px, 18vw, 160px);
+  }
+
+  .score-chart .chart-title {
+    top: clamp(12px, 1.5vw, 16px);
+    left: clamp(12px, 1.5vw, 16px);
+  }
+
+  .score-percentage {
+    font-size: clamp(16px, calc(0.9rem + 1vw), 22px);
+    margin-bottom: clamp(3px, 0.4vw, 5px);
+  }
+
+  .score-label {
+    font-size: clamp(10px, calc(0.6rem + 0.3vw), 14px);
+  }
+}
+
+/* Pour les très petites résolutions */
+@media screen and (max-width: 800px) {
+  .score-percentage {
+    font-size: clamp(14px, calc(0.8rem + 0.8vw), 18px);
+  }
+
+  .score-label {
+    font-size: clamp(9px, calc(0.55rem + 0.25vw), 12px);
+  }
+}
+
+/* Résolution spécifique 1024x780 */
+@media screen and (width: 1024px) and (height: 780px) {
+  .activity-chart,
+  .sessions-chart,
+  .performance-chart,
+  .score-chart {
+    padding: 16px;
+  }
+}
+
+/* Résolution spécifique 1024x1024 */
+@media screen and (width: 1024px) and (height: 1024px) {
+  .activity-chart,
+  .sessions-chart,
+  .performance-chart,
+  .score-chart {
+    padding: 18px;
+  }
+}
+
+/* Résolution spécifique 1440x780 */
+@media screen and (width: 1440px) and (height: 780px) {
+  .activity-chart,
+  .sessions-chart,
+  .performance-chart,
+  .score-chart {
+    padding: 20px;
+  }
+}
+
+/* Résolution spécifique 1440x1024 */
+@media screen and (width: 1440px) and (height: 1024px) {
+  .activity-chart,
+  .performance-chart,
+  .score-chart {
+    padding: 24px;
+  }
+}
+
+.score-percentage {
+  font-size: clamp(18px, calc(1rem + 1.2vw), 26px);
+  font-weight: 700;
+  color: #282d30;
+  line-height: 1;
+  margin-bottom: clamp(4px, 0.5vw, 7px);
+  font-family: "Roboto", sans-serif;
+}
+
+.score-label {
+  font-size: clamp(11px, calc(0.7rem + 0.4vw), 16px);
+  font-weight: 500;
+  color: #74798c;
+  line-height: 1.2;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.sessions-chart .chart-title {
+  font-size: 15px;
+}
+
+/* =============================================== */
+/* SYSTÈME RESPONSIVE UNIFIÉ                      */
+/* =============================================== */
+
+/* Typographie responsive */
+.chart-title {
+  font-size: clamp(12px, 1.1vw, 15px);
+  font-weight: 500;
+  color: #20253a;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.legend-item {
+  font-size: clamp(11px, 1vw, 14px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #74798c;
+  font-family: "Roboto", sans-serif;
+}
+
+.score-percentage {
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 700;
+  color: #282d30;
+  font-family: "Roboto", sans-serif;
+}
+
+.score-label {
+  font-size: clamp(12px, 1.1vw, 16px);
+  color: #74798c;
+  font-family: "Roboto", sans-serif;
+}
+
+.sessions-chart .chart-title {
+  font-size: clamp(12px, 1.1vw, 15px);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  width: clamp(120px, 12vw, 148px);
+}
+
+/* Headers et légendes */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(12px, 1.5vw, 20px);
+}
+
+.chart-legend {
+  display: flex;
+  gap: 20px;
+}
+
+.chart-legend {
+  gap: clamp(12px, 1.5vw, 20px);
+}
+
+/* Tooltips responsive */
+.activity-tooltip {
+  padding: clamp(6px, 0.8vw, 12px);
+  font-size: clamp(10px, 1vw, 12px);
+}
+
+/* =============================================== */
+/* TYPOGRAPHIE RESPONSIVE UNIFORME                */
+/* =============================================== */
+
+/* Typographie fluide adaptée à toutes les résolutions */
+.chart-title {
+  font-size: clamp(12px, calc(0.8rem + 0.3vw), 15px);
+  font-weight: 500;
+  color: #20253a;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.legend-item {
+  font-size: clamp(11px, calc(0.7rem + 0.2vw), 14px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #74798c;
+  font-family: "Roboto", sans-serif;
+}
+
+.score-percentage {
+  font-size: clamp(20px, calc(1.2rem + 0.8vw), 26px);
+  font-weight: 700;
+  color: #282d30;
+  line-height: 1;
+  font-family: "Roboto", sans-serif;
+}
+
+.score-label {
+  font-size: clamp(12px, calc(0.8rem + 0.3vw), 16px);
+  color: #74798c;
+  line-height: 1.2;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.sessions-chart .chart-title {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-weight: 500;
+  width: clamp(120px, 12vw, 148px);
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  margin: 0;
+  z-index: 10;
+}
+
+/* Headers et légendes responsives */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(12px, calc(0.8rem + 0.4vw), 20px);
+}
+
+.chart-legend {
+  display: flex;
+  gap: clamp(12px, calc(0.8rem + 0.4vw), 20px);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-dot--weight {
+  background-color: #282d30;
+}
+
+.legend-dot--calories {
+  background-color: #e60000;
+}
+
+/* Tooltips responsives */
+.activity-tooltip {
+  background: #e60000;
+  color: white;
+  padding: clamp(6px, calc(0.4rem + 0.2vw), 12px);
+  border-radius: 3px;
+  font-size: clamp(10px, calc(0.6rem + 0.2vw), 12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+}
+.tooltip-label {
+  margin: 0 0 4px 0;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+.tooltip-item {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.sessions-tooltip {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  padding: clamp(4px, calc(0.3rem + 0.1vw), 8px);
+  border-radius: 3px;
+  font-size: clamp(10px, calc(0.6rem + 0.2vw), 12px);
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Axes et labels responsifs */
+.activity-chart .recharts-cartesian-axis-tick-value {
+  font-size: clamp(11px, calc(0.7rem + 0.2vw), 14px);
+}
+
+.sessions-chart .recharts-cartesian-axis-tick-value {
+  font-size: clamp(10px, calc(0.6rem + 0.2vw), 12px);
+  transform: translateY(8px); /* Déplace les jours de la semaine plus bas */
+}
+
+.performance-chart .recharts-polar-angle-axis-tick-value {
+  font-size: clamp(9px, calc(0.6rem + 0.15vw), 12px);
+}
+
+/* =============================================== */
+/* STYLES SPÉCIFIQUES POUR LE SCORE CHART         */
+/* =============================================== */
+
+/* Score Chart layout responsive */
+.score-chart .chart-title {
+  position: absolute;
+  top: clamp(16px, 2vw, 24px);
+  left: clamp(16px, 2vw, 24px);
+  margin: 0;
+}
+
+.score-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Maintenir un ratio carré pour le graphique */
+  aspect-ratio: 1;
+  max-width: min(100%, 100vh);
+  max-height: min(100%, 100vw);
+}
+
+.score-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+}
