@@ -1,11 +1,26 @@
 /**
- * Hooks spécialisés pour les graphiques
+ * @fileoverview Hooks React spécialisés pour les graphiques de SportSee
+ * Fournit des hooks personnalisés pour récupérer et formater les données de chaque type de graphique
  */
 import { useState, useEffect } from "react";
 import { sportSeeAPI } from "./sportSeeAPI.js";
 
 /**
- * Hook pour le graphique d'activité
+ * Hook pour récupérer et formater les données du graphique d'activité
+ * Récupère les sessions d'activité avec poids et calories, puis les formate pour le graphique
+ * 
+ * @param {number} userId - L'identifiant de l'utilisateur
+ * @returns {Object} État du hook
+ * @returns {Object|null} return.data - Données formatées pour le graphique
+ * @returns {Array} return.data.sessions - Sessions avec day, kilogram, calories, displayDay
+ * @returns {boolean} return.loading - Indique si le chargement est en cours
+ * @returns {string|null} return.error - Message d'erreur éventuel
+ * 
+ * @example
+ * const { data, loading, error } = useActivityChart(18);
+ * if (!loading && data) {
+ *   console.log(data.sessions); // [{day: 1, kilogram: 70, calories: 240, displayDay: "1"}, ...]
+ * }
  */
 export const useActivityChart = (userId) => {
   const [state, setState] = useState({
@@ -65,7 +80,23 @@ export const useActivityChart = (userId) => {
 };
 
 /**
- * Hook pour le graphique de sessions
+ * Hook pour récupérer et formater les données du graphique de sessions
+ * Récupère les durées moyennes de sessions par jour et ajoute des points fantômes
+ * aux extrémités pour améliorer le rendu visuel de la courbe
+ * 
+ * @param {number} userId - L'identifiant de l'utilisateur
+ * @returns {Object} État du hook
+ * @returns {Object|null} return.data - Données formatées pour le graphique
+ * @returns {Array} return.data.sessions - Sessions incluant points fantômes (day 0 et 8)
+ * @returns {boolean} return.loading - Indique si le chargement est en cours
+ * @returns {string|null} return.error - Message d'erreur éventuel
+ * 
+ * @example
+ * const { data, loading, error } = useSessionsChart(18);
+ * if (!loading && data) {
+ *   // data.sessions contient 9 points : 1 fantôme au début, 7 vrais jours, 1 fantôme à la fin
+ *   console.log(data.sessions);
+ * }
  */
 export const useSessionsChart = (userId) => {
   const [state, setState] = useState({
@@ -144,7 +175,25 @@ export const useSessionsChart = (userId) => {
 };
 
 /**
- * Hook pour le graphique de performance
+ * Hook pour récupérer et formater les données du graphique de performance
+ * Récupère les données de performance, traduit les catégories en français
+ * et les ordonne dans un ordre spécifique pour le radar
+ * 
+ * @param {number} userId - L'identifiant de l'utilisateur
+ * @returns {Object} État du hook
+ * @returns {Array|null} return.data - Données formatées pour le graphique radar
+ * @returns {string} return.data[].subject - Nom de la catégorie en français
+ * @returns {number} return.data[].value - Valeur de performance
+ * @returns {number} return.data[].fullMark - Valeur maximale (250)
+ * @returns {boolean} return.loading - Indique si le chargement est en cours
+ * @returns {string|null} return.error - Message d'erreur éventuel
+ * 
+ * @example
+ * const { data, loading, error } = usePerformanceChart(18);
+ * if (!loading && data) {
+ *   // Données ordonnées : Intensité, Vitesse, Force, Endurance, Énergie, Cardio
+ *   console.log(data);
+ * }
  */
 export const usePerformanceChart = (userId) => {
   const [state, setState] = useState({
@@ -219,7 +268,21 @@ export const usePerformanceChart = (userId) => {
 };
 
 /**
- * Hook pour le graphique de score
+ * Hook pour récupérer et formater les données du graphique de score
+ * Récupère le score quotidien de l'utilisateur et le convertit en pourcentage
+ * 
+ * @param {number} userId - L'identifiant de l'utilisateur
+ * @returns {Object} État du hook
+ * @returns {Object|null} return.data - Données formatées pour le graphique
+ * @returns {number} return.data.percentage - Score en pourcentage (0-100)
+ * @returns {boolean} return.loading - Indique si le chargement est en cours
+ * @returns {string|null} return.error - Message d'erreur éventuel
+ * 
+ * @example
+ * const { data, loading, error } = useScoreChart(18);
+ * if (!loading && data) {
+ *   console.log(data.percentage); // 12 (pour un score de 0.12)
+ * }
  */
 export const useScoreChart = (userId) => {
   const [state, setState] = useState({
@@ -270,6 +333,31 @@ export const useScoreChart = (userId) => {
 
 /**
  * Hook composite pour récupérer toutes les données de graphiques
+ * Utilise tous les hooks de graphiques et agrège leurs états
+ * Utile pour charger toutes les données en une seule fois
+ * 
+ * @param {number} userId - L'identifiant de l'utilisateur
+ * @returns {Object} État combiné de tous les graphiques
+ * @returns {Object|null} return.activity - Données du graphique d'activité
+ * @returns {Object|null} return.sessions - Données du graphique de sessions
+ * @returns {Array|null} return.performance - Données du graphique de performance
+ * @returns {Object|null} return.score - Données du graphique de score
+ * @returns {boolean} return.loading - true si au moins un graphique est en chargement
+ * @returns {boolean} return.error - true si au moins un graphique a une erreur
+ * @returns {Object} return.errors - Détail des erreurs par graphique
+ * @returns {string|null} return.errors.activity - Erreur du graphique d'activité
+ * @returns {string|null} return.errors.sessions - Erreur du graphique de sessions
+ * @returns {string|null} return.errors.performance - Erreur du graphique de performance
+ * @returns {string|null} return.errors.score - Erreur du graphique de score
+ * 
+ * @example
+ * const { activity, sessions, performance, score, loading, error, errors } = useAllCharts(18);
+ * if (!loading) {
+ *   console.log('Toutes les données sont chargées:', { activity, sessions, performance, score });
+ *   if (error) {
+ *     console.error('Erreurs:', errors);
+ *   }
+ * }
  */
 export const useAllCharts = (userId) => {
   const activity = useActivityChart(userId);

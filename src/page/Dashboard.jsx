@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Composant de page Dashboard
+ * Page principale affichant le tableau de bord de l'utilisateur avec tous ses graphiques et statistiques
+ */
 import Header from '../components/Header.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import './dashboard.css';
@@ -15,6 +19,23 @@ import {
   ScoreChart
 } from '../components/charts/index.jsx';
 
+/**
+ * Composant de page Dashboard
+ * Affiche le tableau de bord complet de l'utilisateur avec :
+ * - Message de bienvenue personnalisé
+ * - Graphique d'activité quotidienne (poids et calories)
+ * - Graphique de durée moyenne des sessions
+ * - Graphique de performance (radar)
+ * - Graphique de score
+ * - Statistiques nutritionnelles (calories, protéines, glucides, lipides)
+ * 
+ * @component
+ * @returns {JSX.Element} Page du tableau de bord
+ * 
+ * @example
+ * // Utilisé dans le router avec l'ID utilisateur dans l'URL
+ * <Route path="/dashboard/:userId" element={<Dashboard />} />
+ */
 const Dashboard = () => {
   // Récupération de l'ID utilisateur depuis l'URL
   const { userId } = useParams();
@@ -40,7 +61,17 @@ const Dashboard = () => {
     );
   }
 
-  // Génération dynamique des statistiques à partir des données API
+  /**
+   * Génère les données de statistiques nutritionnelles
+   * Formate les données de l'API pour l'affichage dans les cartes de statistiques
+   * 
+   * @returns {Array<Object>} Tableau d'objets de statistiques
+   * @returns {number} return[].id - Identifiant unique de la statistique
+   * @returns {string} return[].icon - URL de l'icône
+   * @returns {string} return[].value - Valeur formatée
+   * @returns {string} return[].label - Libellé de la statistique
+   * @returns {string} return[].alt - Texte alternatif de l'icône
+   */
   const getStatsData = () => {
     if (!userData || !userData.keyData) {
       // Données par défaut si les données utilisateur sont manquantes

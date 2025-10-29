@@ -1,5 +1,6 @@
 /**
- * ScoreChart - Version fonctionnelle avec styles originaux
+ * @fileoverview Composant de graphique de score quotidien
+ * Affiche le score de l'utilisateur sous forme de graphique circulaire
  */
 import React from 'react';
 import {
@@ -11,6 +12,21 @@ import {
 import { useUser } from '../../services/hooks.js';
 import './charts.css';
 
+/**
+ * Composant de graphique de score quotidien
+ * Affiche le score de l'utilisateur (todayScore ou score) en pourcentage
+ * sous forme de graphique circulaire (donut chart)
+ * 
+ * @component
+ * @param {Object} props - Les propriétés du composant
+ * @param {number} [props.userId=18] - L'identifiant de l'utilisateur
+ * @returns {JSX.Element} Graphique de score ou message d'état (chargement/erreur/vide)
+ * 
+ * @example
+ * return (
+ *   <ScoreChart userId={18} />
+ * )
+ */
 const ScoreChart = ({ userId = 18 }) => {
   const { data: userData, loading, error } = useUser(userId);
 

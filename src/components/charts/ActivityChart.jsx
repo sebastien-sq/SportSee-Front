@@ -1,6 +1,6 @@
 /**
- * Composant graphique d'activité quotidienne
- * Graphique en barres combiné avec poids et calories
+ * @fileoverview Composant de graphique d'activité quotidienne
+ * Affiche un graphique en barres combiné montrant le poids et les calories brûlées
  */
 import {
   ResponsiveContainer,
@@ -18,7 +18,19 @@ import ActivityTooltip from './ActivityTooltip.jsx';
 import './charts.css';
 
 /**
- * Composant principal du graphique d'activité
+ * Composant de graphique d'activité quotidienne
+ * Affiche un graphique en barres avec le poids (kg) et les calories brûlées (kCal)
+ * pour chaque jour d'activité
+ * 
+ * @component
+ * @param {Object} props - Les propriétés du composant
+ * @param {number} [props.userId=12] - L'identifiant de l'utilisateur
+ * @returns {JSX.Element} Graphique d'activité ou message d'état (chargement/erreur/vide)
+ * 
+ * @example
+ * return (
+ *   <ActivityChart userId={18} />
+ * )
  */
 const ActivityChart = ({ userId = 12 }) => {
   const { data, loading, error } = useActivityChart(userId);
@@ -54,7 +66,17 @@ const ActivityChart = ({ userId = 12 }) => {
     ticks.push(t);
   }
 
-  // Fonction pour personnaliser les lignes de grille
+  /**
+   * Composant personnalisé pour les lignes de grille
+   * La ligne du bas est pleine, les autres sont en pointillés
+   * 
+   * @param {Object} props - Propriétés de la ligne
+   * @param {number} props.y1 - Position Y de début
+   * @param {number} props.y2 - Position Y de fin
+   * @param {number} props.x1 - Position X de début
+   * @param {number} props.x2 - Position X de fin
+   * @returns {JSX.Element} Ligne de grille personnalisée
+   */
   const CustomGridLine = (props) => {
     const { y1, y2, x1, x2 } = props;
 
@@ -76,6 +98,16 @@ const ActivityChart = ({ userId = 12 }) => {
     );
   };
 
+  /**
+   * Composant personnalisé pour le curseur du tooltip
+   * Affiche un rectangle gris semi-transparent sur les barres survolées
+   * 
+   * @param {Object} props - Propriétés du curseur
+   * @param {Array} props.points - Points de coordonnées du curseur
+   * @param {number} props.top - Position verticale du curseur
+   * @param {number} props.height - Hauteur du curseur
+   * @returns {JSX.Element} Rectangle de curseur personnalisé
+   */
   const CustomCursor = (props) => {
     // Recharts passe les coordonnées via l'array "points"
     const { points, top, height } = props;

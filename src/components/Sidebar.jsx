@@ -4,6 +4,18 @@ import swimmingIcon from '../assets/icons/swimming.png';
 import dumbbellIcon from '../assets/icons/dumbbell.png';
 import bikingIcon from '../assets/icons/biking.png';
 
+/**
+ * Composant de barre latérale de l'application SportSee
+ * Affiche les icônes de différentes activités sportives et le copyright
+ * 
+ * @component
+ * @returns {JSX.Element} Barre latérale avec icônes d'activités et copyright
+ * 
+ * @example
+ * return (
+ *   <Sidebar />
+ * )
+ */
 const Sidebar = () => {
   return (
     <aside className="sidebar">

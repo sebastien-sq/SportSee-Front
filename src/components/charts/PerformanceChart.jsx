@@ -1,5 +1,6 @@
 /**
- * PerformanceChart - Version fonctionnelle avec styles originaux
+ * @fileoverview Composant de graphique de performance en radar
+ * Affiche les performances de l'utilisateur dans différents domaines (cardio, énergie, etc.)
  */
 import React from 'react';
 import {
@@ -13,6 +14,21 @@ import {
 import { usePerformanceChart } from '../../services/chartHooks.js';
 import './charts.css';
 
+/**
+ * Composant de graphique de performance en radar
+ * Affiche les performances de l'utilisateur sur six axes :
+ * Intensité, Vitesse, Force, Endurance, Énergie, Cardio
+ * 
+ * @component
+ * @param {Object} props - Les propriétés du composant
+ * @param {number} [props.userId=18] - L'identifiant de l'utilisateur
+ * @returns {JSX.Element} Graphique radar de performance ou message d'état (chargement/erreur/vide)
+ * 
+ * @example
+ * return (
+ *   <PerformanceChart userId={18} />
+ * )
+ */
 const PerformanceChart = ({ userId = 18 }) => {
   const { data, loading, error } = usePerformanceChart(userId);
 

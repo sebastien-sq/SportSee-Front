@@ -1,5 +1,6 @@
 /**
- * SessionsChart - Version simplifiée avec activeDot natif
+ * @fileoverview Composant de graphique de durée moyenne des sessions
+ * Affiche la durée moyenne des sessions d'entraînement par jour de la semaine
  */
 import React, { useState, useCallback, useMemo } from 'react';
 import {
@@ -14,22 +15,56 @@ import { useSessionsChart } from '../../services/chartHooks.js';
 import SessionsActiveDot from './SessionsActiveDot.jsx';
 import './charts.css';
 
+/**
+ * Composant de graphique de durée moyenne des sessions
+ * Affiche un graphique linéaire avec la durée des sessions pour chaque jour de la semaine
+ * Inclut un overlay assombri au survol et des points fantômes pour étendre la courbe
+ * 
+ * @component
+ * @param {Object} props - Les propriétés du composant
+ * @param {number} [props.userId=18] - L'identifiant de l'utilisateur
+ * @returns {JSX.Element} Graphique de sessions ou message d'état (chargement/erreur/vide)
+ * 
+ * @example
+ * return (
+ *   <SessionsChart userId={18} />
+ * )
+ */
 const SessionsChart = ({ userId = 18 }) => {
   const { data, loading, error } = useSessionsChart(userId);
   const [overlayPosition, setOverlayPosition] = useState(null);
 
-  // Gestion simplifiée du hover avec position relative
+  /**
+   * Gestionnaire de mouvement de la souris
+   * Met à jour la position de l'overlay en fonction de la position du curseur
+   * 
+   * @param {Object} e - Événement de mouvement
+   * @param {number} e.chartX - Position X dans le graphique
+   */
   const handleMouseMove = useCallback((e) => {
     if (e && e.chartX !== undefined) {
       setOverlayPosition(e.chartX);
     }
   }, []);
 
+  /**
+   * Gestionnaire de sortie de la souris
+   * Réinitialise la position de l'overlay
+   */
   const handleMouseLeave = useCallback(() => {
     setOverlayPosition(null);
   }, []);
 
-  // Tooltip personnalisé pour afficher la valeur et gérer l'overlay
+  /**
+   * Tooltip personnalisé pour afficher la durée de session
+   * Ignore les points fantômes et met à jour la position de l'overlay
+   * 
+   * @param {Object} props - Propriétés du tooltip
+   * @param {boolean} props.active - Indique si le tooltip est actif
+   * @param {Array} props.payload - Données du point survolé
+   * @param {Object} props.coordinate - Coordonnées du point
+   * @returns {JSX.Element|null} Tooltip avec durée ou null
+   */
   const CustomTooltip = useCallback(({ active, payload, coordinate }) => {
     if (active && payload && payload.length && coordinate) {
       // Ne pas afficher le tooltip pour les points fantômes (dayIndex 0 et 8)
