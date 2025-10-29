@@ -53,15 +53,15 @@
   visibility: visible !important;
 }
 
-/* La ligne du bas (dernière) doit être pleine */
+/* Suppression des règles CSS qui écrasent le JavaScript
 .activity-chart .recharts-cartesian-grid-horizontal line:last-child {
   stroke-dasharray: none !important;
 }
 
-/* Les autres lignes (y compris intermédiaire) en pointillés */
 .activity-chart .recharts-cartesian-grid-horizontal line:not(:last-child) {
   stroke-dasharray: 2 2 !important;
 }
+*/
 
 .activity-chart .recharts-cartesian-grid-vertical line {
   stroke: none;
@@ -75,177 +75,99 @@
   fill: #e60000;
 }
 
-/* Rectangle de survol pour le graphique d'activité */
-.activity-chart .recharts-tooltip-cursor {
-  fill: #c4c4c480 !important;
-  stroke: none !important;
-}
+/* Rectangle de survol pour le graphique d'activité - géré par JavaScript */
 
-.activity-chart .activity-tooltip-cursor {
-  fill: #c4c4c480 !important;
-  stroke: none !important;
-}
-
-.activity-chart .recharts-active-bar {
-  opacity: 1;
-}
-
-.activity-chart .recharts-tooltip-cursor.recharts-cartesian-grid {
-  fill: #c4c4c480 !important;
-}
-
-/* Styles spécifiques pour SessionsChart */
+/* Styles spécifiques pour SessionsChart - Version simplifiée */
 .sessions-chart .recharts-cartesian-axis-tick-value {
   fill: #ffffff;
   opacity: 0.7;
   font-size: 12px;
   font-family: "Roboto", sans-serif;
   padding: 0;
-  transform: translateY(8px); /* Déplace les jours de la semaine plus bas */
+  transform: translateY(8px);
 }
 
-.sessions-chart .recharts-tooltip-cursor {
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 32;
+/* Masquer tous les éléments indésirables dans SessionsChart */
+.sessions-chart .recharts-cartesian-grid,
+.sessions-chart .recharts-cartesian-grid-horizontal,
+.sessions-chart .recharts-cartesian-grid-vertical,
+.sessions-chart .recharts-cartesian-grid line,
+.sessions-chart .recharts-reference-line,
+.sessions-chart .recharts-reference-area,
+.sessions-chart .recharts-bar,
+.sessions-chart .recharts-brush,
+.sessions-chart .recharts-cursor,
+.sessions-chart .recharts-focus-area,
+.sessions-chart .recharts-hover-line,
+.sessions-chart .recharts-tooltip-cursor,
+.sessions-chart .recharts-cross-hair {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
+/* Style simple pour la ligne */
 .sessions-chart .recharts-line {
   stroke-width: 2;
   stroke-linecap: round;
-  transition: stroke-width 0.2s ease;
 }
 
-.sessions-chart .recharts-line:hover {
-  stroke-width: 3;
-}
-
-.sessions-chart .recharts-dot {
-  fill: transparent;
-  stroke-width: 0;
-  r: 0;
-  opacity: 0;
-}
-
-.sessions-chart .recharts-active-dot {
-  r: 4;
-  fill: #ffffff;
-  stroke: rgba(255, 255, 255, 0.3);
-  stroke-width: 8;
-  opacity: 1;
-  animation: sessionsDotPulse 0.3s ease-out;
-}
-
-/* Animation pour le point au survol */
-@keyframes sessionsDotPulse {
-  0% {
-    r: 0;
-    opacity: 0;
-  }
-  50% {
-    r: 6;
-    opacity: 0.8;
-  }
-  100% {
-    r: 4;
-    opacity: 1;
-  }
-}
-
-/* Style pour l'activeDot - Simple et propre */
-.sessions-chart .sessions-active-dot {
-  fill: #ffffff !important;
-  stroke: #ffffff33 !important;
-  stroke-width: 5px !important;
-  r: 8px !important;
-}
-
-/* Forcer l'affichage des activeDots */
+/* Style simple et efficace pour l'activeDot */
 .sessions-chart .recharts-active-dot {
   fill: #ffffff !important;
-  stroke: #ffffff33 !important;
-  stroke-width: 5px !important;
-  r: 8px !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* Cercles dans l'activeDot */
-.sessions-chart .recharts-active-dot circle {
-  fill: #ffffff !important;
-  stroke: #ffffff33 !important;
-  stroke-width: 5px !important;
-  r: 4px !important;
-}
-
-/* Tous les cercles de l'activeDot - Style uniforme */
-.sessions-chart .recharts-active-dot,
-.sessions-chart .recharts-dot[r="4"],
-.sessions-chart .recharts-dot[r="6"],
-.sessions-chart circle[r="4"],
-.sessions-chart circle[r="6"],
-.sessions-chart circle[class*="sessions-active-dot"] {
-  fill: #ffffff !important;
-  stroke: #ffffff33 !important;
+  stroke: rgba(255, 255, 255, 0.3) !important;
   stroke-width: 10px !important;
   r: 4px !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
 
-/* Alternative pour cibler directement les éléments SVG */
-.sessions-chart svg circle[r]:not([r="0"]) {
+/* Force l'affichage de notre CustomActiveDot */
+.sessions-chart .recharts-active-dot circle {
   fill: #ffffff !important;
-  stroke: #ffffff33 !important;
-  stroke-width: 5px !important;
-  r: 8px !important;
+  stroke: #ffffff !important;
+  stroke-opacity: 0.3 !important;
+  stroke-width: 10px !important;
+  r: 4px !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
 
-/* Force ultra-aggressive pour TOUS les cercles dans le SessionsChart */
-.sessions-chart svg circle {
-  fill: #ffffff !important;
-  stroke: #ffffff33 !important;
-  stroke-width: 5px !important;
-  r: 8px !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+/* Masquer tous les dots normaux */
+.sessions-chart .recharts-dot {
+  fill: transparent;
+  stroke: none;
+  r: 0;
+  opacity: 0;
 }
 
-/* Spécifiquement pour les activeDot */
-.sessions-chart svg circle[r="8"] {
-  fill: #ffffff !important;
-  stroke: #ffffff33 !important;
-  stroke-width: 5px !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* Overlay d'assombrissement pour les sessions */
-.sessions-chart {
-  position: relative;
-}
-
+/* Overlay d'assombrissement */
 .sessions-overlay {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
   background: rgba(0, 0, 0, 0.1);
   pointer-events: none;
-  display: none;
-  z-index: 1;
+  border-radius: 0 5px 5px 0;
+}
+.sessions-tooltip {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* S'assurer que le SVG des graphiques est au-dessus de l'overlay */
 .sessions-chart .recharts-wrapper {
   position: relative;
-  z-index: 5;
+  z-index: 15;
 }
 
 .sessions-chart .recharts-wrapper svg {
   position: relative;
-  z-index: 5;
+  z-index: 15;
 }
 
 /* Point personnalisé qui suit le curseur - Style simple */
@@ -271,6 +193,41 @@
   fill: #ffffff;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
+}
+
+/* Éloigner les labels de 10px du centre radialement */
+.performance-chart .recharts-polar-angle-axis-tick-value {
+  transform-origin: 123.5px 121.5px; /* Centre du radar (cx, cy) */
+}
+
+/* Cibler spécifiquement les éléments text des labels pour les éloigner */
+.performance-chart .recharts-polar-angle-axis .recharts-text {
+  transform-origin: 123.5px 121.5px;
+}
+
+/* Déplacer chaque label radialement de 10px depuis le centre */
+.performance-chart .recharts-polar-angle-axis-tick:nth-child(1) .recharts-text {
+  transform: translate(0, -10px); /* Intensité - vers le haut */
+}
+
+.performance-chart .recharts-polar-angle-axis-tick:nth-child(2) .recharts-text {
+  transform: translate(7px, -7px); /* Vitesse - haut-droite */
+}
+
+.performance-chart .recharts-polar-angle-axis-tick:nth-child(3) .recharts-text {
+  transform: translate(7px, 7px); /* Force - bas-droite */
+}
+
+.performance-chart .recharts-polar-angle-axis-tick:nth-child(4) .recharts-text {
+  transform: translate(0, 10px); /* Endurance - vers le bas */
+}
+
+.performance-chart .recharts-polar-angle-axis-tick:nth-child(5) .recharts-text {
+  transform: translate(-7px, 7px); /* Énergie - bas-gauche */
+}
+
+.performance-chart .recharts-polar-angle-axis-tick:nth-child(6) .recharts-text {
+  transform: translate(-7px, -7px); /* Cardio - haut-gauche */
 }
 
 .performance-chart .recharts-radar {
@@ -459,7 +416,6 @@
 /* Résolution spécifique 1024x780 */
 @media screen and (width: 1024px) and (height: 780px) {
   .activity-chart,
-  .sessions-chart,
   .performance-chart,
   .score-chart {
     padding: 16px;
@@ -469,7 +425,6 @@
 /* Résolution spécifique 1024x1024 */
 @media screen and (width: 1024px) and (height: 1024px) {
   .activity-chart,
-  .sessions-chart,
   .performance-chart,
   .score-chart {
     padding: 18px;
@@ -479,7 +434,6 @@
 /* Résolution spécifique 1440x780 */
 @media screen and (width: 1440px) and (height: 780px) {
   .activity-chart,
-  .sessions-chart,
   .performance-chart,
   .score-chart {
     padding: 20px;

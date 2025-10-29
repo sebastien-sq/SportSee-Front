@@ -36,7 +36,7 @@ const PerformanceChart = ({ userId = 18 }) => {
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart
           data={data}
-          margin={{ top: 25, right: 35, bottom: 25, left: 35 }}
+          margin={{ top: 20, right: 25, bottom: 20, left: 25 }}
         >
           <PolarGrid />
           <PolarAngleAxis
@@ -60,6 +60,7 @@ const PerformanceChart = ({ userId = 18 }) => {
             stroke="#FF0101"
             fill="#FF0101"
             fillOpacity={0.7}
+            activeDot={false}
           />
         </RadarChart>
       </ResponsiveContainer>

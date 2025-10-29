@@ -1,41 +1,30 @@
-/**
- * Point activé personnalisé pour afficher le point de survol des sessions
- */
-import { useEffect, useRef } from 'react';
-import { setSessionsActiveDotPosition } from './sessionsOverlaySync.js';
+import React, { memo } from 'react';
 
-const SessionsActiveDot = (props) => {
-  const { cx, cy, payload } = props;
-  const circleRef = useRef(null);
-
-  // Mettre à jour la position pour l'overlay en utilisant la position réelle du cercle
-  useEffect(() => {
-    if (payload && payload.dayName && circleRef.current) {
-      // Utiliser getBoundingClientRect pour obtenir la position exacte du cercle
-      const circleRect = circleRef.current.getBoundingClientRect();
-      const parentRect = circleRef.current.closest('.sessions-chart').getBoundingClientRect();
-
-      // Position exacte du centre du cercle
-      const centerX = circleRect.left + (circleRect.width / 2) - parentRect.left;
-      setSessionsActiveDotPosition(centerX);
-    } else {
-      setSessionsActiveDotPosition(null);
-    }
-  }, [cx, payload]);
-
-  // Ne pas afficher l'activeDot pour les points fantômes (sans dayName)
-  if (!payload || !payload.dayName) {
+const SessionsActiveDot = memo(({ cx, cy, payload }) => {
+  // Ne pas afficher l'activeDot pour les points fantômes (dayIndex 0 et 8)
+  if (!payload || payload.dayIndex === 0 || payload.dayIndex === 8) {
     return null;
   }
 
-  return (
-    <circle
-      ref={circleRef}
-      cx={cx}
-      cy={cy}
-      className="sessions-active-dot"
-    />
-  );
-};
+  // Afficher seulement pour les vrais jours (1 à 7)
+  if (payload.dayIndex >= 1 && payload.dayIndex <= 7) {
+    return (
+      <circle
+        cx={cx}
+        cy={cy}
+        r={4}
+        fill="#FFFFFF"
+        stroke="#FFFFFF"
+        strokeOpacity={0.3}
+        strokeWidth={10}
+        style={{
+          filter: 'drop-shadow(0 0 3px rgba(255, 255, 255, 0.5))'
+        }}
+      />
+    );
+  }
+
+  return null;
+});
 
 export default SessionsActiveDot;

@@ -1,7 +1,7 @@
 /**
- * SessionsChart - Version optimisée pour éviter les re-rendus de la courbe
+ * SessionsChart - Version simplifiée avec activeDot natif
  */
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   ResponsiveContainer,
   LineChart,
@@ -11,55 +11,48 @@ import {
   Tooltip
 } from 'recharts';
 import { useSessionsChart } from '../../services/chartHooks.js';
-import { getSessionsActiveDotPosition, setSessionsActiveDotPosition } from './sessionsOverlaySync.js';
-import CustomActiveDot from './CustomActiveDot.jsx';
+import SessionsActiveDot from './SessionsActiveDot.jsx';
 import './charts.css';
 
 const SessionsChart = ({ userId = 18 }) => {
   const { data, loading, error } = useSessionsChart(userId);
   const [overlayPosition, setOverlayPosition] = useState(null);
 
-  // Polling optimisé pour synchroniser avec la position de l'activeDot
-  useEffect(() => {
-    let animationFrame;
-
-    const updatePosition = () => {
-      const currentPosition = getSessionsActiveDotPosition();
-      setOverlayPosition(prev => {
-        // Ne mettre à jour que si la position a vraiment changé
-        if (prev !== currentPosition) {
-          return currentPosition;
-        }
-        return prev;
-      });
-
-      // Continuer le polling seulement si nécessaire
-      if (currentPosition !== null) {
-        animationFrame = requestAnimationFrame(updatePosition);
-      }
-    };
-
-    // Démarrer le polling
-    animationFrame = requestAnimationFrame(updatePosition);
-
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, []); // Pas de dépendances pour éviter les re-créations
-
-  // Fonctions optimisées avec useCallback
-  const handlePositionChange = useCallback((x) => {
-    setOverlayPosition(x);
+  // Gestion simplifiée du hover avec position relative
+  const handleMouseMove = useCallback((e) => {
+    if (e && e.chartX !== undefined) {
+      setOverlayPosition(e.chartX);
+    }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     setOverlayPosition(null);
-    setSessionsActiveDotPosition(null);
   }, []);
 
-  // Mémoriser le graphique pour éviter les re-rendus inutiles
+  // Tooltip personnalisé pour afficher la valeur et gérer l'overlay
+  const CustomTooltip = useCallback(({ active, payload, coordinate }) => {
+    if (active && payload && payload.length && coordinate) {
+      // Ne pas afficher le tooltip pour les points fantômes (dayIndex 0 et 8)
+      const dayIndex = payload[0]?.payload?.dayIndex;
+      if (dayIndex === 0 || dayIndex === 8) {
+        return null;
+      }
+
+      // Mettre à jour la position de l'overlay seulement pour les vrais points
+      if (dayIndex >= 1 && dayIndex <= 7) {
+        setOverlayPosition(coordinate.x);
+      }
+
+      return (
+        <div className="sessions-tooltip">
+          {`${payload[0].value} min`}
+        </div>
+      );
+    }
+    return null;
+  }, []);
+
+  // Mémoriser le graphique avec activeDot simplifié
   const chartComponent = useMemo(() => {
     if (!data || !data.sessions) return null;
 
@@ -69,10 +62,11 @@ const SessionsChart = ({ userId = 18 }) => {
           data={data.sessions}
           margin={{
             top: 50,
-            right: -10, // Encore plus négatif pour maximiser l'espace
-            left:-10,  // Encore plus négatif pour maximiser l'espace
+            right: -10,
+            left: -10,
             bottom: 20,
           }}
+          onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
           <defs>
@@ -88,7 +82,6 @@ const SessionsChart = ({ userId = 18 }) => {
             className="sessions-x-axis"
             tickFormatter={(value) => {
               const dayNames = ["L", "M", "M", "J", "V", "S", "D"];
-              // Ne pas afficher de label pour les points fantômes (jour 0 et 8)
               if (value === 0 || value === 8) {
                 return "";
               }
@@ -97,17 +90,8 @@ const SessionsChart = ({ userId = 18 }) => {
           />
           <YAxis hide />
           <Tooltip
-            content={({ active, payload }) => {
-              // Ne pas afficher le tooltip pour les points fantômes
-              if (active && payload && payload.length && payload[0].payload?.isReal && !payload[0].payload?.isGhost) {
-                return (
-                  <div className="sessions-tooltip">
-                    <p>{`${payload[0].value} min`}</p>
-                  </div>
-                );
-              }
-              return null;
-            }}
+            content={CustomTooltip}
+            cursor={false}
           />
           <Line
             type="monotone"
@@ -115,12 +99,12 @@ const SessionsChart = ({ userId = 18 }) => {
             stroke="url(#sessionsGradient)"
             strokeWidth={2}
             dot={false}
-            activeDot={(props) => <CustomActiveDot {...props} onPositionChange={handlePositionChange} />}
+            activeDot={SessionsActiveDot}
           />
         </LineChart>
       </ResponsiveContainer>
     );
-  }, [data, handleMouseLeave, handlePositionChange]); // Re-render seulement si les données ou callbacks changent
+  }, [data, handleMouseMove, handleMouseLeave, CustomTooltip]);
 
   if (loading) {
     return <div className="chart-loading">Chargement...</div>;
@@ -139,19 +123,19 @@ const SessionsChart = ({ userId = 18 }) => {
       <h3 className="chart-title">Durée moyenne des sessions</h3>
       {chartComponent}
 
-      {/* Overlay pour assombrir la zone à droite du hover */}
+      {/* Overlay simplifié basé sur la position de la souris */}
       {overlayPosition !== null && (
         <div
+          className="sessions-overlay"
           style={{
             position: 'absolute',
-            top: '0', // Couvre toute la hauteur
+            top: '0',
             left: `${overlayPosition}px`,
             right: '0',
             bottom: '0',
-            background: '#000000',
-            opacity: 0.1,
+            background: 'rgba(0, 0, 0, 0.1)',
             pointerEvents: 'none',
-            zIndex: 5, // En dessous du titre mais au-dessus du graphique
+            zIndex: 5,
             borderRadius: '0 5px 5px 0'
           }}
         />

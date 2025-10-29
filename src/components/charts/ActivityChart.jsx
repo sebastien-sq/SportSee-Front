@@ -54,6 +54,56 @@ const ActivityChart = ({ userId = 12 }) => {
     ticks.push(t);
   }
 
+  // Fonction pour personnaliser les lignes de grille
+  const CustomGridLine = (props) => {
+    const { y1, y2, x1, x2 } = props;
+
+    // On veut que la ligne du BAS soit pleine (y1="196")
+    // Donc on cherche la ligne avec la plus grande valeur Y
+    const isBottomLine = y1 > 180; // Si Y > 180, c'est la ligne du bas
+
+    return (
+      <line
+        key={`grid-line-${y1}`}
+        x1={x1}
+        y1={y1}
+        x2={x2}
+        y2={y2}
+        stroke="#dedede"
+        strokeDasharray={isBottomLine ? "0" : "2 2"}
+        opacity={1}
+      />
+    );
+  };
+
+  const CustomCursor = (props) => {
+    // Recharts passe les coordonnées via l'array "points"
+    const { points, top, height } = props;
+
+    // Extraire la position X du premier point
+    let cursorX = 0;
+    if (points && points.length > 0) {
+      cursorX = points[0].x || 0;
+    }
+
+    // Configuration du cursor
+    const cursorWidth = 80; // Largeur pour couvrir les deux barres
+    const centeredX = cursorX - cursorWidth / 2;
+    const cursorY = top || 0;
+    const cursorHeight = height || 186;
+
+    return (
+      <rect
+        x={centeredX}
+        y={cursorY}
+        width={cursorWidth}
+        height={cursorHeight}
+        fill="rgba(196, 196, 196, 0.5)" // Gris semi-transparent
+        stroke="none"
+      />
+    );
+  };
+
   return (
     <div className="activity-chart">
       <div className="chart-header">
@@ -92,11 +142,10 @@ const ActivityChart = ({ userId = 12 }) => {
             allowDecimals={false}
           />
           <CartesianGrid
-            strokeDasharray="2 2"
-            horizontal={true}
+            horizontal={CustomGridLine}
             vertical={false}
-            stroke="#dedede"
-            style={{ opacity: 1, visibility: 'visible', zIndex: 10 }}
+            syncWithTicks={true}
+            yAxisId="weight"
           />
           <XAxis
             dataKey="displayDay"
@@ -112,6 +161,7 @@ const ActivityChart = ({ userId = 12 }) => {
           />
           <Tooltip
             content={<ActivityTooltip />}
+            cursor={<CustomCursor />}
           />
           <Bar
             yAxisId="weight"
