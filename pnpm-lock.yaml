@@ -46,7 +46,7 @@ importers:
         specifier: ^16.3.0
         version: 16.4.0
       vite:
-        specifier: ^7.1.2
+        specifier: ^7.1.12
         version: 7.1.12
 
 packages:
