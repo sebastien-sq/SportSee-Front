@@ -1,6 +1,51 @@
 /**
- * @fileoverview Composant de graphique d'activité quotidienne
- * Affiche un graphique en barres combiné montrant le poids et les calories brûlées
+ * Composant graphique d'activité quotidienne SportSee
+ *
+ * Affiche un graphique en barres combiné montrant le poids (kg) et les calories brûlées
+ * pour chaque jour de la semaine. Utilise recharts pour le rendu.
+ *
+ * @component
+ * @param {Object} props - Propriétés du composant
+ * @param {number} [props.userId=12] - ID de l'utilisateur pour lequel afficher l'activité
+ * @returns {JSX.Element} Graphique d'activité ou état de chargement/erreur
+ *
+ * @example
+ * // Utilisation basique
+ * <ActivityChart userId={18} />
+ *
+ * @example
+ * // Utilisation dans un dashboard
+ * function Dashboard({ userId }) {
+ *   return (
+ *     <div className="dashboard">
+ *       <ActivityChart userId={userId} />
+ *     </div>
+ *   );
+ * }
+ *
+ * @description
+ * Fonctionnalités :
+ * - Graphique en barres doubles (poids + calories)
+ * - Domaine dynamique pour l'axe Y du poids
+ * - Grille personnalisée avec ligne pleine en bas
+ * - Tooltip personnalisé au survol
+ * - Curseur gris semi-transparent
+ * - Légende personnalisée en en-tête
+ * 
+ * Données affichées :
+ * - Axe X : Jours (1, 2, 3, ..., 7)
+ * - Axe Y gauche : Calories (caché)
+ * - Axe Y droit : Poids en kg
+ * - Barre noire : Poids (kilogram)
+ * - Barre rouge : Calories brûlées
+ *
+ * @requires react
+ * @requires recharts - Pour ResponsiveContainer, ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend
+ * @requires ../../services/hooks/chartHooks.js - Hook useActivityChart
+ * @requires ./ActivityTooltip.jsx - Tooltip personnalisé
+ * @requires ./charts.css - Styles des graphiques
+ * @author SportSee Team
+ * @since 1.0.0
  */
 import {
   ResponsiveContainer,
@@ -12,25 +57,16 @@ import {
   Tooltip,
   Legend
 } from 'recharts';
-import { useActivityChart } from '../../services/chartHooks.js';
+import { useActivityChart } from '../../services/hooks/chartHooks.js';
 
 import ActivityTooltip from './ActivityTooltip.jsx';
 import './charts.css';
 
 /**
- * Composant de graphique d'activité quotidienne
- * Affiche un graphique en barres avec le poids (kg) et les calories brûlées (kCal)
- * pour chaque jour d'activité
- * 
- * @component
- * @param {Object} props - Les propriétés du composant
- * @param {number} [props.userId=12] - L'identifiant de l'utilisateur
- * @returns {JSX.Element} Graphique d'activité ou message d'état (chargement/erreur/vide)
- * 
- * @example
- * return (
- *   <ActivityChart userId={18} />
- * )
+ * Composant principal du graphique d'activité
+ *
+ * @param {Object} props - Props du composant
+ * @param {number} [props.userId=12] - ID utilisateur
  */
 const ActivityChart = ({ userId = 12 }) => {
   const { data, loading, error } = useActivityChart(userId);
@@ -66,17 +102,7 @@ const ActivityChart = ({ userId = 12 }) => {
     ticks.push(t);
   }
 
-  /**
-   * Composant personnalisé pour les lignes de grille
-   * La ligne du bas est pleine, les autres sont en pointillés
-   * 
-   * @param {Object} props - Propriétés de la ligne
-   * @param {number} props.y1 - Position Y de début
-   * @param {number} props.y2 - Position Y de fin
-   * @param {number} props.x1 - Position X de début
-   * @param {number} props.x2 - Position X de fin
-   * @returns {JSX.Element} Ligne de grille personnalisée
-   */
+  // Fonction pour personnaliser les lignes de grille
   const CustomGridLine = (props) => {
     const { y1, y2, x1, x2 } = props;
 
@@ -98,16 +124,6 @@ const ActivityChart = ({ userId = 12 }) => {
     );
   };
 
-  /**
-   * Composant personnalisé pour le curseur du tooltip
-   * Affiche un rectangle gris semi-transparent sur les barres survolées
-   * 
-   * @param {Object} props - Propriétés du curseur
-   * @param {Array} props.points - Points de coordonnées du curseur
-   * @param {number} props.top - Position verticale du curseur
-   * @param {number} props.height - Hauteur du curseur
-   * @returns {JSX.Element} Rectangle de curseur personnalisé
-   */
   const CustomCursor = (props) => {
     // Recharts passe les coordonnées via l'array "points"
     const { points, top, height } = props;

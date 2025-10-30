@@ -1,6 +1,54 @@
 /**
- * @fileoverview Composant de graphique de durée moyenne des sessions
- * Affiche la durée moyenne des sessions d'entraînement par jour de la semaine
+ * Composant graphique en ligne des sessions moyennes SportSee
+ *
+ * Affiche un graphique en ligne des durées moyennes de sessions d'entraînement
+ * par jour de la semaine. Inclut des interactions au survol avec overlay et tooltip.
+ * Utilise des points fantômes pour améliorer le rendu visuel aux extrémités.
+ *
+ * @component
+ * @param {Object} props - Propriétés du composant
+ * @param {number} [props.userId=18] - ID de l'utilisateur pour lequel afficher les sessions
+ * @returns {JSX.Element} Graphique en ligne des sessions ou état de chargement/erreur
+ *
+ * @example
+ * // Utilisation basique avec utilisateur par défaut
+ * <SessionsChart />
+ *
+ * @example
+ * // Utilisation avec utilisateur spécifique
+ * <SessionsChart userId={12} />
+ *
+ * @example
+ * // Intégration dans un tableau de bord
+ * function WeeklyInsights({ userId }) {
+ *   return (
+ *     <div className="weekly-container">
+ *       <h2>Analyse hebdomadaire</h2>
+ *       <SessionsChart userId={userId} />
+ *     </div>
+ *   );
+ * }
+ *
+ * @description
+ * Le composant gère :
+ * - Affichage des jours de la semaine (L, M, M, J, V, S, D)
+ * - Points fantômes invisibles aux extrémités (jours 0 et 8) pour une courbe fluide
+ * - Overlay sombre au survol à droite du curseur
+ * - Tooltip personnalisé affichant la durée en minutes
+ * - Gestion des états de chargement et d'erreur
+ * - Gradient sur la ligne pour effet visuel
+ * 
+ * Points fantômes :
+ * Les jours 0 et 8 sont des points fantômes ajoutés par le transformateur
+ * pour améliorer le rendu visuel de la courbe aux extrémités.
+ *
+ * @requires react - Pour useState, useCallback, useMemo
+ * @requires recharts - Pour ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip
+ * @requires ../../services/hooks/chartHooks.js - Hook useSessionsChart
+ * @requires ./charts.css - Styles des graphiques
+ * @uses {ChartHookState<FormattedSession[]>} useSessionsChart
+ * @author SportSee Team
+ * @since 1.0.0
  */
 import React, { useState, useCallback, useMemo } from 'react';
 import {
@@ -11,60 +59,25 @@ import {
   YAxis,
   Tooltip
 } from 'recharts';
-import { useSessionsChart } from '../../services/chartHooks.js';
-import SessionsActiveDot from './SessionsActiveDot.jsx';
+import { useSessionsChart } from '../../services/hooks/chartHooks.js';
 import './charts.css';
 
-/**
- * Composant de graphique de durée moyenne des sessions
- * Affiche un graphique linéaire avec la durée des sessions pour chaque jour de la semaine
- * Inclut un overlay assombri au survol et des points fantômes pour étendre la courbe
- * 
- * @component
- * @param {Object} props - Les propriétés du composant
- * @param {number} [props.userId=18] - L'identifiant de l'utilisateur
- * @returns {JSX.Element} Graphique de sessions ou message d'état (chargement/erreur/vide)
- * 
- * @example
- * return (
- *   <SessionsChart userId={18} />
- * )
- */
 const SessionsChart = ({ userId = 18 }) => {
   const { data, loading, error } = useSessionsChart(userId);
   const [overlayPosition, setOverlayPosition] = useState(null);
 
-  /**
-   * Gestionnaire de mouvement de la souris
-   * Met à jour la position de l'overlay en fonction de la position du curseur
-   * 
-   * @param {Object} e - Événement de mouvement
-   * @param {number} e.chartX - Position X dans le graphique
-   */
+  // Gestion simplifiée du hover avec position relative
   const handleMouseMove = useCallback((e) => {
     if (e && e.chartX !== undefined) {
       setOverlayPosition(e.chartX);
     }
   }, []);
 
-  /**
-   * Gestionnaire de sortie de la souris
-   * Réinitialise la position de l'overlay
-   */
   const handleMouseLeave = useCallback(() => {
     setOverlayPosition(null);
   }, []);
 
-  /**
-   * Tooltip personnalisé pour afficher la durée de session
-   * Ignore les points fantômes et met à jour la position de l'overlay
-   * 
-   * @param {Object} props - Propriétés du tooltip
-   * @param {boolean} props.active - Indique si le tooltip est actif
-   * @param {Array} props.payload - Données du point survolé
-   * @param {Object} props.coordinate - Coordonnées du point
-   * @returns {JSX.Element|null} Tooltip avec durée ou null
-   */
+  // Tooltip personnalisé pour afficher la valeur et gérer l'overlay
   const CustomTooltip = useCallback(({ active, payload, coordinate }) => {
     if (active && payload && payload.length && coordinate) {
       // Ne pas afficher le tooltip pour les points fantômes (dayIndex 0 et 8)
@@ -134,7 +147,6 @@ const SessionsChart = ({ userId = 18 }) => {
             stroke="url(#sessionsGradient)"
             strokeWidth={2}
             dot={false}
-            activeDot={SessionsActiveDot}
           />
         </LineChart>
       </ResponsiveContainer>

@@ -288,21 +288,11 @@ npx jsdoc -r src/
 2. Assurez-vous que les données ont le bon format
 3. Vérifiez que Recharts est correctement installé : `npm install recharts`
 
-## 🤝 Contribution
-
-1. Fork le projet
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
 
 ## 📄 Licence
 
 Ce projet fait partie du parcours de formation OpenClassrooms - Développeur d'application JavaScript React.
 
-## 👤 Auteur
-
-Projet développé dans le cadre de la formation OpenClassrooms
 
 ---
 

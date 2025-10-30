@@ -1,7 +1,51 @@
 /**
- * @fileoverview Composant de page Dashboard
- * Page principale affichant le tableau de bord de l'utilisateur avec tous ses graphiques et statistiques
+ * Page Dashboard principale de l'application SportSee
+ *
+ * Affiche le tableau de bord complet d'un utilisateur avec :
+ * - Message de bienvenue personnalisé
+ * - Graphiques d'activité, sessions, performance et score
+ * - Statistiques nutritionnelles (calories, protéines, glucides, lipides)
+ *
+ * @component
+ * @returns {JSX.Element} Page dashboard complète
+ *
+ * @example
+ * // Utilisation avec React Router
+ * <Route path="/user/:userId" element={<Dashboard />} />
+ *
+ * @example
+ * // Affichage direct avec utilisateur spécifique
+ * function App() {
+ *   return <Dashboard />;
+ * }
+ *
+ * @description
+ * Architecture des données :
+ * - Récupération de l'ID utilisateur depuis l'URL via useParams
+ * - Chargement des données utilisateur via useUser (hook personnalisé)
+ * - Mémorisation des statistiques via useMemo pour optimisation
+ * - Affichage conditionnel basé sur les états loading/error
+ * 
+ * Structure de la page :
+ * 1. Header - Navigation principale
+ * 2. Sidebar - Activités sportives
+ * 3. Dashboard
+ *    - Titre de bienvenue
+ *    - Grille de graphiques (activité, sessions, performance, score)
+ *    - Panneau de statistiques nutritionnelles
+ *
+ * @requires react
+ * @requires react-router-dom - Pour useParams et navigation
+ * @requires ../components/Header.jsx - En-tête de l'application
+ * @requires ../components/Sidebar.jsx - Barre latérale
+ * @requires ../components/charts/index.jsx - Composants de graphiques
+ * @requires ../services/hooks/hooks.js - Hook useUser
+ * @requires ../services/api/DataService.js - Service de données
+ * @requires ../assets/icons - Icônes nutritionnelles
+ * @author SportSee Team
+ * @since 1.0.0
  */
+import React, { useMemo } from 'react';
 import Header from '../components/Header.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import './dashboard.css';
@@ -9,9 +53,9 @@ import CarbsIcon from '../assets/icons/carbs-icon.png?url';
 import ProteinIcon from '../assets/icons/protein-icon.png?url';
 import SugarIcon from '../assets/icons/sugar-icon.png?url';
 import FatIcon from '../assets/icons/fat-icon.png?url';
-import { useUser } from '../services/hooks.js';
+import { useUser } from '../services/hooks/hooks.js';
 import { useParams } from 'react-router-dom';
-import { DataService } from '../services/DataService.js';
+import { DataService } from '../services/api/DataService.js';
 import {
   ActivityChart,
   SessionsChart,
@@ -19,23 +63,6 @@ import {
   ScoreChart
 } from '../components/charts/index.jsx';
 
-/**
- * Composant de page Dashboard
- * Affiche le tableau de bord complet de l'utilisateur avec :
- * - Message de bienvenue personnalisé
- * - Graphique d'activité quotidienne (poids et calories)
- * - Graphique de durée moyenne des sessions
- * - Graphique de performance (radar)
- * - Graphique de score
- * - Statistiques nutritionnelles (calories, protéines, glucides, lipides)
- * 
- * @component
- * @returns {JSX.Element} Page du tableau de bord
- * 
- * @example
- * // Utilisé dans le router avec l'ID utilisateur dans l'URL
- * <Route path="/dashboard/:userId" element={<Dashboard />} />
- */
 const Dashboard = () => {
   // Récupération de l'ID utilisateur depuis l'URL
   const { userId } = useParams();
@@ -46,33 +73,8 @@ const Dashboard = () => {
   // Utilisation du hook pour récupérer les données utilisateur
   const { data: userData, loading, error } = useUser(numericUserId);
 
-  // Guard: si pas d'userId, on attend le router
-  if (!userId) {
-    return (
-      <main className="main-content">
-        <Header />
-        <Sidebar />
-        <div className='dashboard'>
-          <div className='dashboard__welcome'>
-            <h2 className='dashboard__title'>Initialisation...</h2>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  /**
-   * Génère les données de statistiques nutritionnelles
-   * Formate les données de l'API pour l'affichage dans les cartes de statistiques
-   * 
-   * @returns {Array<Object>} Tableau d'objets de statistiques
-   * @returns {number} return[].id - Identifiant unique de la statistique
-   * @returns {string} return[].icon - URL de l'icône
-   * @returns {string} return[].value - Valeur formatée
-   * @returns {string} return[].label - Libellé de la statistique
-   * @returns {string} return[].alt - Texte alternatif de l'icône
-   */
-  const getStatsData = () => {
+  // Optimisation: Mémorisation des statistiques pour éviter les recalculs
+  const statsData = useMemo(() => {
     if (!userData || !userData.keyData) {
       // Données par défaut si les données utilisateur sont manquantes
       return [
@@ -114,12 +116,12 @@ const Dashboard = () => {
         alt: 'Fat icon'
       }
     ];
-  };
+  }, [userData]);
 
-  const statsData = getStatsData();
-
-  // Récupération du prénom utilisateur
-  const firstName = userData?.userInfos?.firstName || 'Utilisateur';
+  // Optimisation: Mémorisation du prénom utilisateur
+  const firstName = useMemo(() => {
+    return userData?.userInfos?.firstName || 'Utilisateur';
+  }, [userData]);
 
   // Gestion des états de chargement et d'erreur
   if (loading) {
@@ -130,7 +132,7 @@ const Dashboard = () => {
         <div className='dashboard'>
           <div className='dashboard__welcome'>
             <h2 className='dashboard__title'>Chargement...</h2>
-            <p className='dashboard__subtitle'>Mode: {DataService.getCurrentMode()}</p>
+            <p className='dashboard__subtitle'>Mode: {DataService.USE_MOCK_DATA ? 'MOCK' : 'API'}</p>
           </div>
         </div>
       </main>
@@ -146,7 +148,7 @@ const Dashboard = () => {
           <div className='dashboard__welcome'>
             <h2 className='dashboard__title'>Erreur de chargement</h2>
             <p className='dashboard__subtitle'>Impossible de récupérer les données utilisateur: {error}</p>
-            <p className='dashboard__subtitle'>Mode: {DataService.getCurrentMode()}</p>
+            <p className='dashboard__subtitle'>Mode: {DataService.USE_MOCK_DATA ? 'MOCK' : 'API'}</p>
           </div>
         </div>
       </main>
