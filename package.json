@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "jsdoc": "npx jsdoc -r src/ -d docs/"
   },
   "dependencies": {
     "react": "^19.1.1",

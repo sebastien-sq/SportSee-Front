@@ -266,7 +266,7 @@ Tous les composants et hooks sont documentés avec JSDoc incluant :
 
 Générer la documentation :
 ```bash
-npx jsdoc -r src/
+npm run jsdoc
 ```
 
 ## 🐛 Dépannage
