@@ -104,7 +104,8 @@ export const useApiData = (fetchFunction, transformer = null, userId) => {
       return;
     }
 
-    let isCancelled = false;
+    const controller = new AbortController(); 
+    const signal = controller.signal;
 
     const loadData = async () => {
       try {
@@ -118,8 +119,8 @@ export const useApiData = (fetchFunction, transformer = null, userId) => {
         // Récupérer les données
         const rawData = await fetchFunctionRef.current(userId);
 
-        // Vérifier si le composant n'a pas été démonté
-        if (isCancelled) return;
+        // Abort la requete si le composant est démonté
+        if (signal.aborted) return;
 
         // Appliquer la transformation si fournie
         let transformedData = rawData;
@@ -142,7 +143,7 @@ export const useApiData = (fetchFunction, transformer = null, userId) => {
 
       } catch (error) {
         // Gestion d'erreur seulement si le composant est toujours monté
-        if (!isCancelled) {
+        if (!signal.aborted) {
           console.error('Erreur de récupération des données:', error);
           setState({
             data: null,
@@ -157,7 +158,7 @@ export const useApiData = (fetchFunction, transformer = null, userId) => {
 
     // Fonction de nettoyage pour annuler la requête
     return () => {
-      isCancelled = true;
+      controller.abort();
     };
   }, [userId]); // Seulement userId comme dépendance
 
