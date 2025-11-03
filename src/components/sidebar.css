@@ -11,9 +11,9 @@
 
   .sidebar-container-icons {
     position: absolute;
-    top: max(70px, calc(100vh - 768px));
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     height: 316px;
     display: flex;
     flex-direction: column;
